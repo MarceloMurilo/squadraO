@@ -35,13 +35,13 @@ npm install -g expo-cli
 
    Abra o terminal e execute o comando abaixo:
    ```bash
-   git clone https://github.com/seu-usuario/squadra.git
+   git clone https://github.com/MarceloMurilo/squadraO.git
    ```
 
 2. **Navegue até a pasta do projeto** 📁
 
    ```bash
-   cd squadra
+   cd squadraO
    ```
 
 3. **Instale as dependências do frontend** 🔧
@@ -123,7 +123,7 @@ npm install -g expo-cli
 ## 📂 Estrutura do Projeto
 
 ```
-squadra/
+squadraO/
 ├── volley-frontend/
 │   ├── app/
 │   ├── src/
