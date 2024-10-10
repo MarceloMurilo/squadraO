@@ -145,4 +145,3 @@ Sinta-se à vontade para contribuir com este projeto! Se você tiver ideias ou e
 
 ---
 
-Espero que esse README tenha ficado claro e fácil de seguir! Se precisar de mais alguma coisa, é só me avisar. 🎉
