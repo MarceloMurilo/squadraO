@@ -21,8 +21,19 @@ const HomeScreen = ({ navigation }) => {
     <View>
       <Text>Bem-vindo, usuário: {user}</Text>
       <Button title="Logout" onPress={() => navigation.navigate('Login')} />
+      <Button 
+        title="Reservar Quadra" 
+        onPress={() => navigation.navigate('CourtListScreen')} 
+      />
     </View>
   );
 };
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+});
 
 export default HomeScreen;
