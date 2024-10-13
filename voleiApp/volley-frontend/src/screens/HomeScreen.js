@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, Button } from 'react-native';
+import { View, Text, Button, StyleSheet } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 
@@ -8,18 +8,28 @@ const HomeScreen = ({ navigation }) => {
 
   useEffect(() => {
     const fetchUserData = async () => {
-      const token = await AsyncStorage.getItem('token');
-      const response = await axios.get('http://localhost:3000/api/auth/protected', {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      setUser(response.data.userId);
+      try {
+        const token = await AsyncStorage.getItem('token');
+        if (token) {
+          const response = await axios.get('http://10.0.2.2:3000/api/auth/protected', {
+            headers: { Authorization: `Bearer ${token}` },
+          });
+          setUser(response.data.userId);  // Defina o userId conforme a resposta do backend
+        }
+      } catch (error) {
+        console.error('Erro ao buscar dados do usuário:', error);
+      }
     };
     fetchUserData();
   }, []);
 
   return (
-    <View>
-      <Text>Bem-vindo, usuário: {user}</Text>
+    <View style={styles.container}>
+      {user ? (
+        <Text>Bem-vindo, usuário: {user}</Text>
+      ) : (
+        <Text>Carregando informações do usuário...</Text>
+      )}
       <Button title="Logout" onPress={() => navigation.navigate('Login')} />
       <Button 
         title="Reservar Quadra" 
@@ -28,6 +38,7 @@ const HomeScreen = ({ navigation }) => {
     </View>
   );
 };
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,

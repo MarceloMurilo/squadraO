@@ -1,13 +1,22 @@
 const express = require('express');
-const app = express();
 const cors = require('cors');
-const path = require('path');
+const app = express();
 
-// Importando rotas
-const userRoutes = require('./routes/userRoutes');
-console.log('userRoutes:', userRoutes); // Log para verificar a importação
-const courtRoutes = require('./routes/courtRoutes');
+// Importando middlewares de autenticação e função
+const authMiddleware = require('./middlewares/authMiddleware');
+const roleMiddleware = require('./middlewares/roleMiddleware');
+
+// Importando rotas para jogadores (player)
+const playerRoutes = require('./routes/player/playerRoutes');
+const reservationRoutes = require('./routes/player/reservationRoutes');
+
+// Importando rotas para donos de quadras (owner)
+const courtManagementRoutes = require('./routes/owner/courtManagementRoutes');
+const ownerReservationsRoutes = require('./routes/owner/ownerReservationsRoutes');
+
+// Importando autenticação e usuário
 const authRoutes = require('./routes/authRoutes');
+const userRoutes = require('./routes/userRoutes');
 
 // Middleware
 app.use(express.json());
@@ -23,10 +32,17 @@ app.use((req, res, next) => {
   next();
 });
 
-// Registrando rotas
-app.use('/api/usuarios', userRoutes);
-app.use('/api/quadras', courtRoutes);
+// Rotas protegidas por autenticação e verificação de funções
+app.use('/api/player', authMiddleware, roleMiddleware(['player']), playerRoutes);
+app.use('/api/player/reservations', authMiddleware, roleMiddleware(['player']), reservationRoutes);
+
+// Rotas protegidas para donos de quadras
+app.use('/api/owner/courts', authMiddleware, roleMiddleware(['owner']), courtManagementRoutes);
+app.use('/api/owner/reservations', authMiddleware, roleMiddleware(['owner']), ownerReservationsRoutes);
+
+// Rotas públicas de autenticação e usuários
 app.use('/api/auth', authRoutes);
+app.use('/api/usuarios', userRoutes);
 
 // Rota de teste no server.js
 app.get('/api/test', (req, res) => {
@@ -36,9 +52,7 @@ app.get('/api/test', (req, res) => {
 // Listando rotas registradas para depuração
 app._router.stack.forEach(function (r) {
   if (r.route && r.route.path) {
-    console.log(
-      `Rota registrada: ${r.route.path} [${Object.keys(r.route.methods)}]`
-    );
+    console.log(`Rota registrada: ${r.route.path} [${Object.keys(r.route.methods)}]`);
   }
 });
 

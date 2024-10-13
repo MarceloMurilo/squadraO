@@ -1,6 +1,8 @@
 const express = require('express');
-const pool = require('../db');
+const pool = require('../../db');
 const router = express.Router();
+const authMiddleware = require('../../middlewares/authMiddleware');
+const roleMiddleware = require('../../middlewares/roleMiddleware');
 
 // Rota para cadastrar uma nova quadra (Create)
 router.post('/', async (req, res) => {

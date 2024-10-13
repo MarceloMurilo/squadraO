@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = 'http://192.168.0.12:3000/api'; // Altere conforme a URL do backend
+const API_URL = 'http://10.0.2.2:3000/api'; // Altere conforme a URL do backend
 
 export const apiLogin = async (email, senha) => {
   try {
