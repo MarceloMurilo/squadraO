@@ -1,0 +1,39 @@
+services:
+  database:
+    image: postgres:15
+    container_name: database
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: caribe12
+      POSTGRES_DB: voleibol_db
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+  backend:
+    build:
+      context: ./volley-backend
+    environment:
+      DB_USER: postgres
+      DB_HOST: database
+      DB_NAME: voleibol_db
+      DB_PASS: caribe12
+      DB_PORT: 5432
+      JWT_SECRET: sua_chave_secreta
+      NODE_ENV: production
+    ports:
+      - "3000:3000"
+    depends_on:
+      - database
+
+  frontend:
+    build:
+      context: ./volley-frontend
+    ports:
+      - "19000:19000"
+    depends_on:
+      - backend
+
+volumes:
+  postgres-data:
