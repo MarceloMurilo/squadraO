@@ -1,0 +1,10 @@
+# Ignorar arquivos .env em todos os diretórios
+volley-backend/.env
+volley-frontend/.env
+
+# Ignorar node_modules (caso não queira subir dependências)
+node_modules/
+
+# Ignorar logs e arquivos de sistema comuns
+*.log
+.DS_Store
