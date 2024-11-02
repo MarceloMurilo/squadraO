@@ -26,7 +26,8 @@ const HomeScreen = ({ navigation }) => {
   return (
     <View style={styles.container}>
       {user ? (
-        <Text>Bem-vindo, usuário: {user}</Text>
+        <Text>Bem-vindo, cabaço: {user}</Text>
+    
       ) : (
         <Text>Carregando informações do usuário...</Text>
       )}
