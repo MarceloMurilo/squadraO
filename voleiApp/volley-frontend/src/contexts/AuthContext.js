@@ -5,7 +5,7 @@ const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
-
+ // Testando
   const login = async (email, password) => {
     try {
       console.log('Tentando login com:', email, password); // Log de tentativa de login
