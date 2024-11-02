@@ -29,7 +29,7 @@ const HomeScreen = ({ navigation }) => {
         <Text>Bem-vindo, cabaço: {user}</Text>
     
       ) : (
-        <Text>Carregando informações do usuário...</Text>
+        <Text>Carregando informações do cabaço...</Text>
       )}
       <Button title="Logout" onPress={() => navigation.navigate('Login')} />
       <Button 
