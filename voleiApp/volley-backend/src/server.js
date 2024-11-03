@@ -54,7 +54,7 @@ app.use('/api/empresas', companyRoutes);
 
 // Rotas para convites (protegidas por autenticação)
 app.use('/api/invites', authMiddleware, inviteRoutes);
-app.use('/api/invites', authMiddleware, inviteUserRoutes);
+app.use('/api/invites/user', authMiddleware, inviteUserRoutes); // Ajuste para evitar conflito de rota com inviteRoutes
 
 // Rotas públicas de autenticação e usuários
 app.use('/api/auth', authRoutes);
