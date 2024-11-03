@@ -22,6 +22,10 @@ const userRoutes = require('./routes/userRoutes');
 // Importando rotas para empresas
 const companyRoutes = require('./routes/companyRoutes'); // Nova rota para empresas
 
+// Importando rotas para convites
+const inviteRoutes = require('./routes/invites/inviteRoutes'); // Nova rota para convites
+const inviteUserRoutes = require('./routes/invites/inviteUserRoutes'); // Nova rota para convites do usuário
+
 // Configurando middlewares globais
 app.use(express.json());
 app.use(cors());
@@ -47,6 +51,10 @@ app.use('/api/owner/reservations', authMiddleware, roleMiddleware(['owner']), ow
 
 // Rotas para empresas (sem autenticação, caso seja acessível a todos)
 app.use('/api/empresas', companyRoutes);
+
+// Rotas para convites (protegidas por autenticação)
+app.use('/api/invites', authMiddleware, inviteRoutes);
+app.use('/api/invites', authMiddleware, inviteUserRoutes);
 
 // Rotas públicas de autenticação e usuários
 app.use('/api/auth', authRoutes);
