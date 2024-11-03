@@ -17,4 +17,5 @@ COPY . .
 EXPOSE 19000
 
 # Comando para iniciar o Expo
-CMD ["npx", "expo", "start", "--tunnel"]
+CMD ["npx", "expo", "start", "--no-interactive"]
+

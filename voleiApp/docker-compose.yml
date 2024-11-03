@@ -18,7 +18,7 @@ services:
       DB_USER: postgres
       DB_HOST: database
       DB_NAME: voleibol_db
-      DB_PASS: caribe12
+      DB_PASS: root
       DB_PORT: 5432
       JWT_SECRET: sua_chave_secreta
       NODE_ENV: production

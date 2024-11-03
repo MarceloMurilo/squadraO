@@ -1,3 +1,4 @@
+// Importando dependências
 const express = require('express');
 const cors = require('cors');
 const app = express();
@@ -7,7 +8,7 @@ const authMiddleware = require('./middlewares/authMiddleware');
 const roleMiddleware = require('./middlewares/roleMiddleware');
 
 // Importando rotas para jogadores (player)
-const playerRoutes = require('./routes/player/playerRoutes');
+const playerRoutes = require('./routes/player/playerRoutes'); // Rotas do jogador, incluindo /quadras/disponiveis
 const reservationRoutes = require('./routes/player/reservationRoutes');
 
 // Importando rotas para donos de quadras (owner)
@@ -18,7 +19,10 @@ const ownerReservationsRoutes = require('./routes/owner/ownerReservationsRoutes'
 const authRoutes = require('./routes/authRoutes');
 const userRoutes = require('./routes/userRoutes');
 
-// Middleware
+// Importando rotas para empresas
+const companyRoutes = require('./routes/companyRoutes'); // Nova rota para empresas
+
+// Configurando middlewares globais
 app.use(express.json());
 app.use(cors());
 
@@ -32,19 +36,23 @@ app.use((req, res, next) => {
   next();
 });
 
-// Rotas protegidas por autenticação e verificação de funções
-app.use('/api/player', authMiddleware, roleMiddleware(['player']), playerRoutes);
-app.use('/api/player/reservations', authMiddleware, roleMiddleware(['player']), reservationRoutes);
+// Rotas para jogadores protegidas por autenticação e verificação de função
+// Permite tanto "player" quanto "jogador" como papéis permitidos
+app.use('/api/player', authMiddleware, roleMiddleware(['player', 'jogador']), playerRoutes);
+app.use('/api/player/reservations', authMiddleware, roleMiddleware(['player', 'jogador']), reservationRoutes);
 
-// Rotas protegidas para donos de quadras
+// Rotas para donos de quadras protegidas por autenticação e verificação de função
 app.use('/api/owner/courts', authMiddleware, roleMiddleware(['owner']), courtManagementRoutes);
 app.use('/api/owner/reservations', authMiddleware, roleMiddleware(['owner']), ownerReservationsRoutes);
+
+// Rotas para empresas (sem autenticação, caso seja acessível a todos)
+app.use('/api/empresas', companyRoutes);
 
 // Rotas públicas de autenticação e usuários
 app.use('/api/auth', authRoutes);
 app.use('/api/usuarios', userRoutes);
 
-// Rota de teste no server.js
+// Rota de teste no server.js para verificar o funcionamento
 app.get('/api/test', (req, res) => {
   res.json({ message: 'Rota de teste funcionando!' });
 });
