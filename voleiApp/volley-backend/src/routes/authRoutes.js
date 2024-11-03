@@ -18,7 +18,7 @@ const verifyToken = (req, res, next) => {
     if (err) {
       return res.status(401).json({ error: 'Token inválido' });
     }
-    req.userId = decoded.id; // Passa o ID do usuário adiante
+    req.user = { id: decoded.id, role: decoded.role }; // Passa o ID e o role do usuário adiante
     next();
   });
 };
@@ -42,8 +42,12 @@ router.post('/register', async (req, res) => {
       [nome, email, hashedPassword, profile_image, user_role]
     );
 
-    // Gerar o token JWT
-    const token = jwt.sign({ id: result.rows[0].id_usuario }, process.env.JWT_SECRET, { expiresIn: '1h' });
+    // Gerar o token JWT com `id` e `role`
+    const token = jwt.sign(
+      { id: result.rows[0].id_usuario, role: result.rows[0].user_role }, // Inclui `role` no token
+      process.env.JWT_SECRET,
+      { expiresIn: '1h' }
+    );
 
     // Retornar o token e os dados do usuário (sem a senha)
     res.status(201).json({ token, user: { ...result.rows[0], senha: undefined } });
@@ -72,10 +76,12 @@ router.post('/login', async (req, res) => {
       return res.status(401).json({ error: 'Senha incorreta' });
     }
 
-    // Gera o token JWT
-    const token = jwt.sign({ id: user.id_usuario, role: user.user_role }, process.env.JWT_SECRET, {
-      expiresIn: '1h' // Token expira em 1 hora
-    });
+    // Gera o token JWT com `id` e `role`
+    const token = jwt.sign(
+      { id: user.id_usuario, role: user.user_role }, // Inclui `role` no token
+      process.env.JWT_SECRET,
+      { expiresIn: '1h' } // Token expira em 1 hora
+    );
 
     res.status(200).json({ token });
   } catch (error) {
@@ -86,7 +92,7 @@ router.post('/login', async (req, res) => {
 
 // Rota protegida (apenas para testar a autenticação)
 router.get('/protected', verifyToken, (req, res) => {
-  res.status(200).json({ message: 'Acesso permitido. Você está autenticado!', userId: req.userId });
+  res.status(200).json({ message: 'Acesso permitido. Você está autenticado!', userId: req.user.id, role: req.user.role });
 });
 
 module.exports = router;
