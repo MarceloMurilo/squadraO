@@ -20,7 +20,7 @@ const authMiddleware = (req, res, next) => {
     // Log para verificar o conteúdo decodificado do token
     console.log("Token decodificado:", decoded);
 
-    req.user = { id: decoded.id, role: decoded.role }; // Passa o ID e o role do usuário adiante
+    req.user = { id: decoded.id, papel_usuario: decoded.papel_usuario }; // Passa o ID e o role do usuário adiante
     next();
   });
 };
