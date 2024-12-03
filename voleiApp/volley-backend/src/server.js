@@ -26,10 +26,29 @@ const companyRoutes = require('./routes/companyRoutes'); // Nova rota para empre
 const inviteRoutes = require('./routes/invites/inviteRoutes'); // Nova rota para convites
 const inviteUserRoutes = require('./routes/invites/inviteUserRoutes'); // Nova rota para convites do usuário
 
+
+=======
+// Rota CEP Import
+const cepRoutes = require('./routes/cepRoutes/cepRoutes'); 
+
+// Rotas de equilíbrio de times e jogos
+const gameRoutes = require('./routes/player/gameRoutes');
+const jogosRoutes = require('./routes/player/jogosRoutes'); // Nova rota para jogos
+
+// Rota amigos
+const amigosRoutes = require('./routes/amigosRoutes');
+
+// Avaliçoes
+const avaliacoesRoutes = require('./routes/player/AvaliacoesRoutes');
+
+
 // Configurando middlewares globais
 app.use(express.json());
 app.use(cors());
 
+// Configurando amigos
+app.use('/organizador', amigosRoutes);
+app.use('/organizadores', amigosRoutes);
 // Middleware de logging para todas as requisições
 app.use((req, res, next) => {
   console.log(`\n=== Nova requisição recebida ===`);cd
@@ -41,9 +60,15 @@ app.use((req, res, next) => {
 });
 
 // Rotas para jogadores protegidas por autenticação e verificação de função
-// Permite tanto "player" quanto "jogador" como papéis permitidos
 app.use('/api/player', authMiddleware, roleMiddleware(['player', 'jogador']), playerRoutes);
 app.use('/api/player/reservations', authMiddleware, roleMiddleware(['player', 'jogador']), reservationRoutes);
+
+// Rotas para equilíbrio de times e jogos
+app.use('/player', gameRoutes);
+app.use('/jogos', jogosRoutes); // Configurando a nova rota de jogos
+
+// Rotas de Avaliações
+app.use('/avaliacoes', avaliacoesRoutes);
 
 // Rotas para donos de quadras protegidas por autenticação e verificação de função
 app.use('/api/owner/courts', authMiddleware, roleMiddleware(['owner']), courtManagementRoutes);
@@ -64,6 +89,9 @@ app.use('/api/usuarios', userRoutes);
 app.get('/api/test', (req, res) => {
   res.json({ message: 'Rota de teste funcionando!' });
 });
+
+// Endpoint de CEP
+app.use('/api/cep', cepRoutes); // Configurando a rota para consultar CEP
 
 // Listando rotas registradas para depuração
 app._router.stack.forEach(function (r) {
